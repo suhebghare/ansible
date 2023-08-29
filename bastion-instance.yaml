@@ -1,0 +1,57 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: False
+  tasks:
+    - name: Import bastion variables
+      include_vars: vars/bastion_setup
+
+    - name: Import VPC variables
+      include_vars: vars/output_vars
+
+    - name: create a new vprofile key pair
+      ec2_key:
+        name: vprofile_key
+        region: "{{region}}"
+      register: key_out
+
+    - name: save private key into file
+      copy:
+        content: "{{key_out.key.private_key}}"
+        dest: ./bastion-key.pem
+        mode: 0600
+      when: key_out.changed
+
+    - name: create sec grp for bastion host
+      ec2_group:
+        name: bastion-host-sg
+        description: allow 22 access from my ip
+        region: "{{region}}"
+        vpc_id: "{{vpcid}}"
+        rules:
+          - proto: tcp
+            from_port: 22
+            to_port: 200
+            cidr_ip: "{{MYIP}}"
+        register: BastionSG_out
+
+    - name: creating bastion host
+      ec2:
+        key_name: vprofile_key
+        region: "{{region}}"
+        instance_type: t2.micro
+        image: "{{bastion_ami}}"
+        wait: yes
+        wait_timeout: 300
+        instance_tags:
+          Name: "Bastion-host"
+          Project: Vprofile
+          Owner: Devops Team
+        exact_count: 1
+        count_tag:
+          Name: "Bastion-host"
+          Project: Vprofile
+          Owner: Devops Team
+        group_id: "{{BastionSG_out.group_id}}"
+        vpc_subnet_id: "{{pubsub1id}}"
+      register: BastionHost_out
