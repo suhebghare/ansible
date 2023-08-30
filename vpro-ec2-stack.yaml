@@ -42,7 +42,6 @@
         description: allow 22 access from bastion host
         region: "{{region}}"
         vpc_id: "{{vpcid}}"
-        purge_rules: no
         rules:
           - proto: tcp
             from_port: 80
@@ -53,20 +52,10 @@
             from_port: 22
             to_port: 22
             group_id: "{{BastionSGid}}"
-      register: vproStackSG_out
-      until: vproStackSG_out is not failed
-      retries: 5
 
-    - name: update sec grp for its own sg id
-      ec2_group:
-        name: vproStack-sg
-        description: allow 22 access from bastion host
-        region: "{{region}}"
-        vpc_id: "{{vpcid}}"
-        purge_rules: no
-        rules:
           - proto: all
-            group_id: "{{vproStackSG_out.group_id}}"
+            cidr_ip: "{{vpcCidr}}"
+      register: vproStackSG_out
 
     - name: Creating Nginx web01 server
       ec2:
