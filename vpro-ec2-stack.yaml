@@ -1,0 +1,24 @@
+---
+- name: installing vrpofile ec2 stack
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  tasks:
+    - name: Import bastion variables
+      include_vars: vars/vpc-vpc-output_vars
+
+    - name: Import vprofile instance variables
+      include_vars: vars/vprostacksetup
+
+    - name: create a new vprofile key pair
+      ec2_key:
+        name: vprokey
+        region: "{{region}}"
+      register: vprokey_out
+
+    - name: save private key into file
+      copy:
+        content: "{{vprokey_out.key.private_key}}"
+        dest: ./loginkey_vpro.pem
+        mode: 0600
+      when: vprokey_out.changed
