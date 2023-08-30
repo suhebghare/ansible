@@ -5,7 +5,7 @@
   gather_facts: False
   tasks:
     - name: Import bastion variables
-      include_vars: vars/vpc-vpc-output_vars
+      include_vars: vars/vpc-output_vars
 
     - name: Import vprofile instance variables
       include_vars: vars/vprostacksetup
@@ -22,3 +22,46 @@
         dest: ./loginkey_vpro.pem
         mode: 0600
       when: vprokey_out.changed
+
+    - name: create sec grp for load balancer
+      ec2_group:
+        name: vproELB-sg
+        description: allow 80 access from everywhere
+        region: "{{region}}"
+        vpc_id: "{{vpcid}}"
+        rules:
+          - proto: tcp
+            from_port: 80
+            to_port: 80
+            cidr_ip: 0.0.0.0/0
+      register: vproELBSG_out
+
+    - name: create sec grp for vprofile stack
+      ec2_group:
+        name: vproStack-sg
+        description: allow 22 access from bastion host
+        region: "{{region}}"
+        vpc_id: "{{vpcid}}"
+        purge_rule: no
+        rules:
+          - proto: tcp
+            from_port: 80
+            to_port: 80
+            group_id: "{{vproELBSG_out.group_id}}"
+
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            group_id: "{{BastionSGid}}"
+      register: vproStackSG_out
+
+    - name: update sec grp for its own sg id
+      ec2_group:
+        name: vproStack-sg
+        description: allow 22 access from bastion host
+        region: "{{region}}"
+        vpc_id: "{{vpcid}}"
+        purge_rule: no
+        rules:
+          - proto: all
+            group_id: "{{vproStackSG_out.group_id}}"

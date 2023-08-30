@@ -31,7 +31,7 @@
         rules:
           - proto: tcp
             from_port: 22
-            to_port: 200
+            to_port: 22
             cidr_ip: "{{MYIP}}"
       register: BastionSG_out
 
@@ -55,3 +55,10 @@
         group_id: "{{BastionSG_out.group_id}}"
         vpc_subnet_id: "{{pubsub1id}}"
       register: bastionHost_out
+
+    - name: insert bastion host id in output file
+      blockinfile:
+        path: vars/vpc-output_vars
+        backup: yes
+        block: |
+          BastionSGid: "{{BastionSG_out.group_id}}"
