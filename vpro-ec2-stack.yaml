@@ -42,7 +42,7 @@
         description: allow 22 access from bastion host
         region: "{{region}}"
         vpc_id: "{{vpcid}}"
-        purge_rule: no
+        purge_rules: no
         rules:
           - proto: tcp
             from_port: 80
@@ -61,7 +61,7 @@
         description: allow 22 access from bastion host
         region: "{{region}}"
         vpc_id: "{{vpcid}}"
-        purge_rule: no
+        purge_rules: no
         rules:
           - proto: all
             group_id: "{{vproStackSG_out.group_id}}"
