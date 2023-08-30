@@ -1,5 +1,4 @@
 region: "us-east-1"
-state: present
 vpcid: vpc-0c4b5ac7b866235e7
 pubsub1id: subnet-03e3584110d1bbaa2
 pubsub2id: subnet-0c91bb5857755c8d7
@@ -11,6 +10,3 @@ igwid: igw-0b42464797417b122
 pubRTid: rtb-02a080c2f2ef011dc
 NATGWid: nat-0d97a9f40ffb7d7df
 privRTid: rtb-01faa790bc6a117fd
-# BEGIN ANSIBLE MANAGED BLOCK
-BastionSGid: "sg-0a06590a8396829c2"
-# END ANSIBLE MANAGED BLOCK
