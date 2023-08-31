@@ -5,7 +5,7 @@
   tasks:
     - name: Install prerequisites
       apt:
-        name: [ 'curl', 'gnupg' ]
+        name: ['curl', 'gnupg']
         state: present
 
     - name: Import the RabbitMQ signing key
@@ -15,7 +15,7 @@
 
     - name: Add the RabbitMQ repository
       apt_repository:
-        repo: "deb [signed-by=/usr/share/keyrings/erlang-archive-keyring.gpg] https://packages.erlang-solutions.com/ubuntu {{ ansible_distribution_release }} contrib"
+        repo: "deb [signed-by=/usr/share/keyrings/erlang-archive-keyring.gpg] https://packages.erlang-solutions.com/ubuntu {{ ansible_distribution }} {{ ansible_distribution_version }} contrib"
         state: present
         filename: erlang-solutions.list
 
