@@ -51,10 +51,10 @@
         filename: erlang-solutions.list
       tags: rabbitmq
 
-    - name: Update package list
-      apt:
-        update_cache: yes
-      tags: rabbitmq
+#    - name: Update package list
+#      apt:
+#        update_cache: yes
+#      tags: rabbitmq
 
     - name: Install Rabbit MQ
       apt:

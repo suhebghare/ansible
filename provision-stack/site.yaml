@@ -13,11 +13,11 @@
 - name: Setup Memcached service
   import_playbook: memcache.yaml
 
-- name: Setup rabbitmq service
-  import_playbook: rabbitmq.yaml
-
 - name: Setup Tomcat application server
   import_playbook: appserver.yaml
 
 - name: Setup Nginx webserver
   import_playbook: web.yaml
+
+- name: Setup rabbitmq service
+  import_playbook: rabbitmq.yaml
