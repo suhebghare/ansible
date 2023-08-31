@@ -5,7 +5,7 @@
   tasks:
     - name: copy sql file to tmp directory
       copy:
-        src: file/db_backup.sql
+        src: files/db_backup.sql
         dest: /tmp/db_backup.sql
       tags:
         - deploy
