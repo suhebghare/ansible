@@ -1,7 +1,7 @@
 ---
 - name: setup mysql db with accounts details and remote login
   hosts: dbsrvgrp
-  gather_facts: np
+  gather_facts: no
   tasks:
     - name: Installing mysql server and dependencies
       package:
