@@ -16,6 +16,7 @@
         login_user: "{{dbuser}}"
         login_password: "{{dbpass}}"
         state: import
+        target: /tmp/db_backup.sql
       notify:
         - restart mysql
       tags:
